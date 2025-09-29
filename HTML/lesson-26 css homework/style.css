@@ -1,0 +1,80 @@
+.nav {
+    width: 200px;
+    height: 200px;
+    background-color: blue;
+    animation: nav 5s;
+    margin-top: 100px;
+    margin-left: 100px;
+    position: absolute;
+    z-index: 1;
+}
+
+
+@keyframes nav {
+    0% {
+    }
+    50% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}
+
+
+
+.mine {
+    width: 150px;
+    height: 150px;
+    background-color: red;
+    animation: mine 5s;
+    margin-top: 125px;
+    margin-left: 125px;
+    position: absolute;
+    z-index: 2;
+
+}
+
+
+
+
+@keyframes mine {
+    0% {
+    }
+    50% {
+        transform: rotate();
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+
+
+
+.navbar {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(255, 0, 234);
+    animation: mine 5s ;
+    margin-top: 150px;
+    margin-left: 150px;
+    position: absolute;
+    z-index: 3;
+
+}
+
+
+
+
+@keyframes navbar {
+    0% {
+    }
+    50% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}

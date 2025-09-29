@@ -1,0 +1,25 @@
+.home{
+    background-color: #eee;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-left: 30px;
+    width: 1000px;
+}
+
+
+.box{
+    background-color: #eee;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-top: 100px;
+    margin-left: 30px;
+    width: 1000px;
+}
+
+.text-black-50{
+    margin-left: 20px;
+    border: 2px solid grey;
+    border-radius: 7px;
+}
+
+.sale{
+    width: 400px;
+}

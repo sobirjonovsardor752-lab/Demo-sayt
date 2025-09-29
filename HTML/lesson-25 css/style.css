@@ -1,0 +1,242 @@
+.box{
+    background-color: red;
+    width: 600px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    animation: mymove 3s infinite;
+    margin-top: 100px;
+}
+@keyframes mymove {
+    0% {
+        
+    }
+    50% {
+        box-shadow:0px 10px black;
+        border-top-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+    }
+    100% {
+
+    }
+}
+.nav{
+    background-color: yellow;
+    width: 600px;
+    height: 40px;
+    margin-top: 100px;
+    animation: mycontent 5s infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    transform-origin: left ;
+
+}
+@keyframes mycontent {
+    0% {
+
+    }
+    50% {
+        transform: rotateZ(360deg);
+    }
+    100% {
+
+    }
+}
+.scale{
+    background-color: aqua;
+    width:600px ;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-top: 100px;
+    animation: maymun 3s infinite;
+}
+@keyframes maymun {
+    0% {
+
+    }
+    50% {
+        transform: scale(0.3);
+    }
+    100% {
+        
+    }
+}
+.skew {
+    background-color: grey;
+    width: 600px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-top: 100px;
+    animation: myname 3s infinite;
+}
+@keyframes myname {
+    0% {
+
+    }
+    50%{
+        transform: skewX(-20deg);
+    }
+    100% {
+        transform: skewX(0);
+    }
+}
+.translate{
+    background-color:grey ;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    margin-top: 100px;
+    animation: mysurname 3s infinite;  
+}
+@keyframes mysurname {
+    0%{
+
+    }
+    50% {
+        transform: translate(100px,100px);
+        box-shadow:-8px -8px black ,-16px -16px grey; 
+    }
+}
+.night{
+    display: flex;
+    position: absolute;
+    z-index: 2;
+}
+.box1{
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    margin-top: 200px;
+    animation: mylastname 3s infinite;
+}
+@keyframes mylastname {
+    0% {
+        transform: translate(100px);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: translate(100px);
+    }
+
+}
+.box2{
+    background-color: yellow;
+    width: 100px;
+    height: 100px;
+    margin-top: 200px;
+    margin-left: 200px;
+    animation: mylastnames 3s infinite;
+}
+@keyframes mylastnames {
+    0% {
+        transform: translate(-100px);
+    }
+    50% {
+        transform: rotate(-90deg);
+    }
+    100% {
+        transform: translate(-100px);
+    }
+}
+
+
+
+
+
+
+.night1{
+    display: flex;
+    position: absolute;
+    z-index: 2;
+}
+.box3{
+    background-color: blue;
+    width: 100px;
+    height: 100px;
+    animation: mylive 3s infinite;
+}
+
+
+
+@keyframes mylive {
+    0% {
+        transform: translate(100px);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: translate(100px);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.box4{
+    background-color: green;
+    width: 100px;
+    height: 100px;
+    margin-left: 200px;
+    animation: mylaptop 3s infinite;
+}
+
+
+
+@keyframes mylaptop {
+    0% {
+        transform: translate(-100px);
+    }
+    50% {
+        transform: rotate(-90deg);
+    }
+    100% {
+        transform: translate(-100px);
+    }
+}
+
+
+
+
+
+.home{
+    position: absolute;
+    z-index: 3;
+    margin-left: 130px;
+
+}
+
+
+
+h1{
+    margin-top: 90px;
+    margin-left: 50px;
+}
+
+
+
+
+
+.dunyo{
+    position: relative;
+}

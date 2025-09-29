@@ -1,0 +1,321 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.start-1{
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.start-2{
+    background-image:url(./img/3742\ 1.png);
+    height: 762.19px;
+    display: flex;
+}
+.start-3{
+    margin-top: 100px;
+}
+.start-4{
+    display: flex;
+    margin-top: 100px;
+}
+.div{
+    background-image: url(./img/Group\ 13.png);
+    width: 309px;
+    height:930px;
+}
+
+
+
+
+
+
+
+.r3{
+    margin-left: 30px;
+}
+.sq{
+    margin-left: 20px;
+}
+
+
+.ul1{
+    display: flex;
+    list-style: none;
+    margin-left: 750px;
+    align-items: center;
+}
+.Now{
+    margin-left: 30px;
+    background-color: #000;
+    color: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 6px;
+}
+li{
+    margin-left: 50px;
+}
+
+.dark-mode{
+    margin-left: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #000;
+    color: white;
+    border-radius: 30px;
+}
+
+.work{
+    width: 1520px;
+}
+
+
+
+.platforma{
+    margin-top: 250px;
+    margin-left: 50px;
+}
+.text{
+    background-color: black;
+    width: 1131px;
+    height: 339px;
+    margin-top: 150px;
+}
+
+
+
+
+
+.div2{
+    display: flex;
+}
+
+
+.see{
+    font-size: 55px;
+    margin-left: 380px;
+    margin-top: 40px;
+    width: 140px;
+}
+.see1{
+    font-size: 55px;
+    margin-left: 100px;
+    margin-top: 40px;
+    width: 140px;
+}
+.see2{
+    font-size: 55px;
+    margin-left: 100px;
+    margin-top: 40px;
+    width: 140px;
+}
+
+
+
+
+.div3{
+    display: flex;
+    padding-left: 370px;
+}
+
+.see3{
+    margin-left: 30px;
+}
+.see4{
+    margin-left: 130px;
+}
+.see5{
+    margin-left: 130px;
+}
+
+
+
+
+
+.learn{
+    font-size: 35px;
+    margin-top: 180px;
+    margin-left: 135px;
+}
+.short{
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin-left: 140px;
+    color: rgb(92, 92, 92);
+}
+
+
+
+.lorem{
+    width: 663px;
+    height: 162px;
+    font-size: 23px;
+    margin-left: 50px;
+}
+.more{
+    background-color: #000;
+    color: #fff;
+    margin-top: 30px;
+    margin-left: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 6px;
+}
+.imgs{
+    margin-top: 50px;
+    margin-left: 50px;
+}
+.logo{
+    margin-left: 100px;
+}
+
+
+
+
+.short1{
+    width: 490px;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin-left: 140px;
+    color: rgb(92, 92, 92);
+}
+.div4{
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    margin-left: 140px;
+    margin-top: 50px;
+    width: 297px;
+}
+.free{
+    margin-top: 10px;
+}
+.short2{
+    margin-top: 10px;
+}
+
+.start-6{
+    display: flex;
+}
+
+.start-7{
+    text-align: center;
+}
+.short3{
+    text-align: center;
+    width: 280px;
+    margin-left: 580px;
+    width: 490px;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: rgb(92, 92, 92);
+}
+
+
+
+
+.start-8{
+    background-image: url(./img/Group\ 47.png);
+    width: 267px;
+    height: 50px;
+    flex-wrap: nowrap;
+    margin-left: 140px;
+    display: flex;
+    margin-top: 60px;
+}
+.search{
+    margin-left: 220px;
+}
+
+li{
+    list-style: none;
+    color: grey;
+    margin-left: 50px;
+}
+.all{
+    color: #000;
+    margin-left: 100px;
+}
+.ocean{
+    display: flex;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.start-9{
+    display: flex;
+}
+.start-10{
+    display: flex;
+}
+.mebel{
+    margin-left: 140px;
+    margin-top: 100px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    width: 267px;
+    height: 338px;
+}
+.mebel1{
+    margin-left: 60px;
+    margin-top: 100px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    width: 267px;
+    height: 338px;
+}
+.sell{
+    display: flex;
+}
+.furnit{
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.money{
+    margin-top: 10px;
+    margin-left: 80px;
+    font-size: 20px; 
+}
+.mask1{
+    width: 267px;
+}
+.text2{
+    font-size: 18px;
+    margin-left: 10px;
+    margin-top: 20px;
+    color: grey;
+}
+.Now3{
+    margin-left: 10px;
+    margin-top: 18px;
+    background-color: #000;
+    color: #fff;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 6px;
+}
+
+
+
+
+
+.Now4{
+    margin-left: 720px;
+    margin-top: 50px;
+    background-color: #000;
+    color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 6px;
+}

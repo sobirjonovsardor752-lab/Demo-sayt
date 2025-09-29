@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IshTop — Ish topuvchi sayt (HTML)</title>
+  <meta name="description" content="IshTop - mahalliy ishlar. Roʻyxat, filtr, parallax va ariza yuborish" />
+  <style>
+    :root{
+      --bg:#f7f8fb; --card:#fff; --accent:#5b21b6; --muted:#6b7280;
+      --glass: rgba(255,255,255,0.7);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#111;line-height:1.45}
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.5));
+      border-bottom:1px solid rgba(0,0,0,0.06);
+    }
+    .container{max-width:1100px;margin:0 auto;padding:16px;}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:46px;height:46px;background:linear-gradient(135deg,#4f46e5,#ec4899);border-radius:10px;color:white;display:flex;align-items:center;justify-content:center;font-weight:700}
+    nav{display:flex;gap:10px;align-items:center}
+    input[type="search"], input[type="text"]{padding:10px;border-radius:8px;border:1px solid #e5e7eb}
+    button{cursor:pointer;border:0;padding:10px 12px;border-radius:8px;background:var(--accent);color:white;font-weight:600}
+    /* Hero / Parallax */
+    .hero{
+      height:300px;position:relative;overflow:hidden;
+      display:flex;align-items:center;
+      color:white;
+    }
+    .hero .bg{
+      position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=60');
+      background-size:cover;background-position:center;
+      transform:translateY(0); will-change:transform;
+      filter:brightness(0.55);
+    }
+    .hero .content{position:relative;z-index:2;padding:24px;}
+    .hero h1{font-size:28px;margin:0}
+    .hero p{margin:8px 0 0;color:rgba(255,255,255,0.95)}
+    /* Layout */
+    main{display:grid;grid-template-columns:2fr 1fr;gap:20px;padding:24px 16px 60px;max-width:1100px;margin:0 auto}
+    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(15,23,42,0.06);border:1px solid rgba(0,0,0,0.04)}
+    .job{display:flex;justify-content:space-between;gap:12px;border-radius:10px;padding:12px;border:1px solid #f0f0f0}
+    .job h3{margin:0;font-size:16px}
+    .job p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    .btn-ghost{background:transparent;border:1px solid #e6e6e6;color:#111;padding:8px 10px;border-radius:8px}
+    /* Sidebar forms */
+    form .row{display:flex;gap:8px;margin-bottom:8px}
+    textarea{width:100%;min-height:80px;padding:8px;border-radius:8px;border:1px solid #e5e7eb}
+    /* Modal */
+    .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:60}
+    .modal{width:100%;max-width:480px;background:white;padding:18px;border-radius:12px}
+    .show{display:flex}
+    /* responsive */
+    @media (max-width:900px){
+      main{grid-template-columns:1fr;padding:16px}
+      .hero{height:260px}
+    }
+    footer{padding:18px 16px;text-align:center;color:var(--muted);font-size:13px}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;border:1px solid #eee;font-size:12px;background:#fbfbff}
+    .flex{display:flex;align-items:center}
+    .gap{gap:10px}
+    .muted{color:var(--muted)}
+    .link{color:var(--accent);text-decoration:underline;background:transparent;border:none;padding:0;font-weight:600}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+      <div class="brand">
+        <div class="logo">IT</div>
+        <div>
+          <div style="font-weight:700">IshTop</div>
+          <div style="font-size:12px;color:var(--muted)">Ish topishda yordam (HTML demo)</div>
+        </div>
+      </div>
+
+      <nav>
+        <input id="search" type="search" placeholder="Kalit so‘z, kompaniya yoki lavozim..." />
+        <input id="city" type="text" placeholder="Shahar" style="width:120px"/>
+        <button id="openRegisterBtn">Roʻyxatdan oʻtish</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero parallax -->
+  <section class="hero">
+    <div class="bg" id="parallaxBg"></div>
+    <div class="container content">
+      <h1>IshTop — Ish topish endi oson</h1>
+      <p>Mahalliy ishlar, masofaviy imkoniyatlar va qisqa muddatli ishlar.</p>
+      <div style="margin-top:12px">
+        <button onclick="scrollToJobs()" class="btn-ghost" style="color:white;background:rgba(255,255,255,0.15);">E'lonlarni ko‘rish</button>
+        <button id="openRegisterBtn2" class="btn-ghost" style="margin-left:10px;color:white;background:transparent;border:1px solid rgba(255,255,255,0.3)">Roʻyxatdan oʻtish</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <!-- Left: Jobs -->
+    <section>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 style="margin:0">Ish e'lonlari <span id="jobsCount" class="small muted"></span></h2>
+          <div class="small muted">So‘nggi eʼlonlar</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input id="quickSearch" type="text" placeholder="Qidiruv..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5e7eb" />
+          <select id="typeFilter" style="padding:8px;border-radius:8px;border:1px solid #e5e7eb">
+            <option value="">Barchasi</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Remote">Remote</option>
+          </select>
+        </div>
+
+        <div id="jobsList" style="display:flex;flex-direction:column;gap:10px"></div>
+
+        <div id="noJobs" class="small muted" style="display:none;margin-top:8px">Hech qanday natija topilmadi.</div>
+      </div>
+
+      <!-- Quick post sample -->
+      <div class="card" style="margin-top:14px">
+        <h3 style="margin:0 0 8px 0">Tez e'lon namunasi</h3>
+        <p class="small muted">Agarda siz tez e'lon joylamoqchi bo'lsangiz, pastdagi form orqali qo'shishingiz mumkin (bu demo localStorage saqlaydi).</p>
+      </div>
+    </section>
+
+    <!-- Right: Sidebar -->
+    <aside>
+      <div class="card">
+        <h3 style="margin-top:0">Tez profil</h3>
+        <div id="profileArea" class="small muted">Roʻyxatdan oʻtmagansiz</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin-top:0">Ish joyini joylashtirish</h3>
+        <form id="postJobForm">
+          <div class="row"><input name="title" placeholder="Lavozim" required /></div>
+          <div class="row"><input name="company" placeholder="Kompaniya" required /></div>
+          <div class="row"><input name="location" placeholder="Shahar" required /></div>
+          <div class="row">
+            <input name="type" placeholder="To'liq/Part-time/Remote" required />
+            <input name="salary" placeholder="Maosh" style="width:90px"/>
+          </div>
+          <div class="row"><textarea name="description" placeholder="Qisqacha ta'rif" required></textarea></div>
+          <div style="display:flex;gap:8px">
+            <button type="submit">E'lon qilish</button>
+            <button type="button" id="clearJobs" class="btn-ghost" style="background:transparent;color:inherit;border:1px solid #eee">Tozalash</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin-top:0">Filtrlar</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="tag" onclick="setCity('')">Hammasi</button>
+          <button class="tag" onclick="setCity('Toshkent')">Toshkent</button>
+          <button class="tag" onclick="setCity('Samarqand')">Samarqand</button>
+          <button class="tag" onclick="setCity('Namangan')">Namangan</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin-top:0">Qo‘llab-quvvatlash</h3>
+        <p class="small muted">Savollar: <a href="mailto:support@ishtop.example" class="link">support@ishtop.example</a></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    © <span id="year"></span> IshTop — Demo HTML sayti
+  </footer>
+
+  <!-- Modals -->
+  <div id="modalBack" class="modal-back">
+    <div class="modal">
+      <h3 id="modalTitle">Roʻyxatdan oʻtish</h3>
+      <form id="registerForm">
+        <div style="margin-bottom:8px">
+          <input name="name" placeholder="Ism" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb"/>
+        </div>
+        <div style="margin-bottom:8px">
+          <input name="email" type="email" placeholder="Email" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb"/>
+        </div>
+        <div style="margin-bottom:12px">
+          <select name="role" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb">
+            <option value="jobseeker">Ish izlovchi</option>
+            <option value="employer">Ish beruvchi</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button type="submit">Saqlash</button>
+          <button type="button" id="closeModal" class="btn-ghost" style="background:transparent;color:inherit;border:1px solid #eee">Bekor qilish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Apply Modal -->
+  <div id="applyBack" class="modal-back">
+    <div class="modal">
+      <h3 id="applyTitle">Ariza yuborish</h3>
+      <form id="applyForm">
+        <div style="margin-bottom:8px">
+          <input name="fullname" placeholder="Toʻliq ism" required style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb"/>
+        </div>
+        <div style="margin-bottom:8px">
+          <input name="phone" placeholder="Telefon (ixtiyoriy)" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb"/>
+        </div>
+        <div style="margin-bottom:12px">
+          <textarea name="message" placeholder="Qisqacha xabar (ixtiyoriy)" style="min-height:80px;padding:8px;border-radius:8px;border:1px solid #e5e7eb"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button type="submit">Yuborish</button>
+          <button type="button" id="closeApply" class="btn-ghost" style="background:transparent;color:inherit;border:1px solid #eee">Bekor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  // --- Data & utils (localStorage) ---
+  const sampleJobs = [
+    {id:1, title:'Frontend Developer', company:'TechSolutions', location:'Toshkent', type:'Full-time', salary:'1200 USD', description:'React, HTML/CSS, 1+ yil tajriba.'},
+    {id:2, title:'UX/UI Dizayner', company:'CreativeLab', location:'Samarqand', type:'Part-time', salary:'600 USD', description:'Figma, prototyping, portfolio kerak.'},
+    {id:3, title:'Data Analyst', company:'InsightCo', location:'Namangan', type:'Full-time', salary:'900 USD', description:'SQL, Excel, Python.'}
+  ];
+
+  const JOBS_KEY = 'ishtop_jobs_v1';
+  const USER_KEY = 'ishtop_user_v1';
+
+  function loadJobs(){
+    const raw = localStorage.getItem(JOBS_KEY);
+    if(raw) return JSON.parse(raw);
+    localStorage.setItem(JOBS_KEY, JSON.stringify(sampleJobs));
+    return sampleJobs.slice();
+  }
+  function saveJobs(jobs){ localStorage.setItem(JOBS_KEY, JSON.stringify(jobs)); }
+
+  // --- Initial render ---
+  let jobs = loadJobs();
+  let currentUser = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+
+  const jobsList = document.getElementById('jobsList');
+  const jobsCount = document.getElementById('jobsCount');
+  const profileArea = document.getElementById('profileArea');
+  const yearEl = document.getElementById('year');
+  yearEl.textContent = new Date().getFullYear();
+
+  function renderProfile(){
+    if(currentUser){
+      profileArea.innerHTML = \`<div style="font-weight:700">\${escapeHTML(currentUser.name)}</div><div class="small muted">\${escapeHTML(currentUser.email)}</div><div style="margin-top:8px"><button id="logoutBtn" class="link">Chiqish</button></div>\`;
+      document.getElementById('logoutBtn').addEventListener('click', ()=>{
+        if(confirm('Haqiqatan chiqmoqchimisiz?')){ currentUser=null; localStorage.removeItem(USER_KEY); renderProfile(); }
+      });
+    } else {
+      profileArea.innerHTML = 'Roʻyxatdan oʻtmagan. <button id="openRegisterInline" class="link">Roʻyxatdan oʻtish</button>';
+      document.getElementById('openRegisterInline').addEventListener('click', openRegisterModal);
+    }
+  }
+
+  function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',\"'\":\"&#39;\"})[c]); }
+
+  // --- Render jobs with filters ---
+  function renderJobs(filterText='', cityFilter='', typeFilter=''){
+    jobsList.innerHTML = '';
+    const q = filterText.trim().toLowerCase();
+    const filtered = jobs.filter(j=>{
+      const matches = (!q) || (j.title+' '+j.company+' '+j.description).toLowerCase().includes(q);
+      const cityMatches = !cityFilter || j.location.toLowerCase().includes(cityFilter.toLowerCase());
+      const typeMatches = !typeFilter || j.type === typeFilter;
+      return matches && cityMatches && typeMatches;
+    });
+
+    jobsCount.textContent = \`(\${filtered.length})\`;
+    if(filtered.length === 0){ document.getElementById('noJobs').style.display='block'; return; }
+    document.getElementById('noJobs').style.display='none';
+
+    filtered.forEach(j=>{
+      const div = document.createElement('div');
+      div.className = 'job';
+      div.innerHTML = \`
+        <div style="flex:1">
+          <h3>\${escapeHTML(j.title)}</h3>
+          <div class="small muted">\${escapeHTML(j.company)} • \${escapeHTML(j.location)} • \${escapeHTML(j.type)}</div>
+          <p>\${escapeHTML(j.description)}</p>
+        </div>
+        <div style="min-width:140px;text-align:right">
+          <div style="font-weight:700">\${escapeHTML(j.salary || '-')}</div>
+          <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+            <button class="applyBtn btn-ghost" data-id="\${j.id}">Ariza yuborish</button>
+            <button class="copyBtn" data-id="\${j.id}">Havolani nusxalash</button>
+          </div>
+        </div>\`;
+      jobsList.appendChild(div);
+    });
+
+    // Attach behavior
+    document.querySelectorAll('.applyBtn').forEach(b=>{
+      b.addEventListener('click', (e)=>{
+        const id = e.currentTarget.dataset.id;
+        openApplyModal(id);
+      });
+    });
+    document.querySelectorAll('.copyBtn').forEach(b=>{
+      b.addEventListener('click', (e)=>{
+        const id = e.currentTarget.dataset.id;
+        const url = location.href.split('#')[0] + '#job-' + id;
+        navigator.clipboard?.writeText(url);
+        alert('Havola nusxalandi!');
+      });
+    });
+  }
+
+  // --- Search / filters events ---
+  document.getElementById('quickSearch').addEventListener('input', (e)=>{
+    renderJobs(e.target.value, document.getElementById('city').value, document.getElementById('typeFilter').value);
+  });
+  document.getElementById('search').addEventListener('input', (e)=>{
+    // sync main search
+    document.getElementById('quickSearch').value = e.target.value;
+    renderJobs(e.target.value, document.getElementById('city').value, document.getElementById('typeFilter').value);
+  });
+  document.getElementById('city').addEventListener('input', (e)=>{
+    renderJobs(document.getElementById('quickSearch').value, e.target.value, document.getElementById('typeFilter').value);
+  });
+  document.getElementById('typeFilter').addEventListener('change', (e)=>{
+    renderJobs(document.getElementById('quickSearch').value, document.getElementById('city').value, e.target.value);
+  });
+
+  // --- Posting job ---
+  document.getElementById('postJobForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const newJob = {
+      id: Date.now(),
+      title: fd.get('title'),
+      company: fd.get('company'),
+      location: fd.get('location'),
+      type: fd.get('type'),
+      salary: fd.get('salary'),
+      description: fd.get('description')
+    };
+    jobs.unshift(newJob);
+    saveJobs(jobs);
+    e.target.reset();
+    renderJobs(document.getElementById('quickSearch').value, document.getElementById('city').value, document.getElementById('typeFilter').value);
+    alert('E\'lon joylandi — rahmat!');
+  });
+
+  document.getElementById('clearJobs').addEventListener('click', ()=>{
+    if(confirm('Barcha e\'lonlarni tozalaysizmi? (sample e\'lonlar ham o\'chadi)')){ jobs=[]; saveJobs(jobs); renderJobs(); }
+  });
+
+  // --- Modal register ---
+  const modalBack = document.getElementById('modalBack');
+  function openRegisterModal(){ modalBack.classList.add('show'); document.getElementById('modalTitle').textContent='Roʻyxatdan oʻtish'; }
+  function closeRegisterModal(){ modalBack.classList.remove('show'); }
+  document.getElementById('openRegisterBtn').addEventListener('click', openRegisterModal);
+  document.getElementById('openRegisterBtn2').addEventListener('click', openRegisterModal);
+  document.getElementById('closeModal').addEventListener('click', closeRegisterModal);
+  document.getElementById('registerForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    currentUser = {name:fd.get('name'), email:fd.get('email'), role:fd.get('role')};
+    localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+    renderProfile(); closeRegisterModal();
+    alert('Roʻyxatdan oʻtish muvaffaqiyatli — ' + currentUser.name);
+  });
+
+  // --- Apply modal ---
+  const applyBack = document.getElementById('applyBack');
+  let applyingJobId = null;
+  function openApplyModal(jobId){
+    applyingJobId = jobId;
+    const job = jobs.find(j=>String(j.id) === String(jobId));
+    document.getElementById('applyTitle').textContent = 'Ariza: ' + (job ? job.title : '');
+    applyBack.classList.add('show');
+  }
+  function closeApplyModal(){ applyBack.classList.remove('show'); applyingJobId=null; }
+  document.getElementById('closeApply').addEventListener('click', closeApplyModal);
+  document.getElementById('applyForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const payload = {
+      jobId: applyingJobId,
+      name: fd.get('fullname'),
+      phone: fd.get('phone'),
+      message: fd.get('message'),
+      appliedAt: new Date().toISOString()
+    };
+    // In demo: save applications under localStorage key per user
+    const appKey = 'ishtop_apps_v1';
+    const apps = JSON.parse(localStorage.getItem(appKey) || '[]');
+    apps.push(payload);
+    localStorage.setItem(appKey, JSON.stringify(apps));
+    closeApplyModal();
+    alert('Ariza muvaffaqiyatli yuborildi. Rahmat!');
+    e.target.reset();
+  });
+
+  // --- Open register inline ---
+  function openRegisterInline(){ openRegisterModal(); }
+
+  // --- Helpers for filters ---
+  function setCity(c){ document.getElementById('city').value = c; renderJobs(document.getElementById('quickSearch').value, c, document.getElementById('typeFilter').value); }
+
+  // --- Parallax effect (simple) ---
+  const bg = document.getElementById('parallaxBg');
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY;
+    bg.style.transform = 'translateY(' + (y * 0.2) + 'px)';
+  });
+
+  // --- Utility functions ---
+  function scrollToJobs(){ window.scrollTo({top: document.querySelector('main').offsetTop - 20, behavior:'smooth'}); }
+
+  // --- Init UI ---
+  renderProfile();
+  renderJobs();
+  // search sync
+  document.getElementById('quickSearch').value = '';
+  // attach small handlers
+  document.getElementById('openRegisterBtn').addEventListener('click', openRegisterModal);
+  document.getElementById('openRegisterBtn2').addEventListener('click', openRegisterModal);
+
+  // Close modal on backdrop click
+  modalBack.addEventListener('click', (e)=>{ if(e.target === modalBack) closeRegisterModal(); });
+  applyBack.addEventListener('click', (e)=>{ if(e.target === applyBack) closeApplyModal(); });
+
+  // Escape key to close
+  window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ closeRegisterModal(); closeApplyModal(); } });
+
+</script>
+
+</body>
+</html>

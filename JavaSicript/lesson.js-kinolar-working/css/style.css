@@ -1,0 +1,10 @@
+ol{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+li {
+    width: 200px;
+    height: 400px;
+}

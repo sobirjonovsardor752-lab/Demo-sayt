@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YotoqTop • Toshkent talabalar turar joyi (MVP)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Toshkentga kelayotgan talabalar uchun yotoqxona, kvartira va xonadon e'lonlari. Qidiruv, filtrlar, saralash va tezkor aloqa." />
+  <style>
+    .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    dialog::backdrop{background:rgba(0,0,0,.35)}
+  </style>
+  <!-- Leaflet (Map) & Lottie -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" referrerpolicy="no-referrer"></script>
+  <style>
+    .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    dialog::backdrop{background:rgba(0,0,0,.35)}
+    /* Parallax hero */
+    .parallax-hero{position:relative;background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop');background-attachment:fixed;background-size:cover;background-position:center}
+    .parallax-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.35))}
+    .parallax-inner{position:relative;z-index:1}
+    /* Map height responsive */
+    #map{height:360px}
+    @media (min-width:768px){#map{height:480px}}
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-800">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/70 border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex w-6 h-6 items-center justify-center rounded bg-indigo-600 text-white text-xs font-bold">YT</span>
+        <span class="font-bold text-xl">YotoqTop • Tashkent</span>
+        <span class="ml-2 text-xs px-2 py-1 rounded-full bg-slate-900 text-white">Sentyabr 2025</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-3 text-sm">
+        <a href="#listings" class="hover:underline">E'lonlar</a>
+        <a href="#how" class="hover:underline">Qanday ishlaydi?</a>
+        <a href="#safety" class="hover:underline">Xavfsizlik</a>
+        <button id="openPost" class="rounded-2xl bg-indigo-600 text-white px-4 py-2">E'lon berish</button>
+      </nav>
+      <button id="openFiltersMobile" class="md:hidden rounded-2xl border px-3 py-2">Filtrlar</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4">
+    <!-- Parallax Hero -->
+    <section class="parallax-hero rounded-2xl overflow-hidden mt-6">
+      <div class="parallax-inner px-6 py-16 md:py-24 text-white text-center">
+        <div id="lottie-hero" class="mx-auto mb-4 w-24 h-24"></div>
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Toshkentda yotoqxona va turar joy toping</h1>
+        <p class="mt-2 text-slate-100/90 max-w-2xl mx-auto">Sentyabr gavjum mavsumida tez, xavfsiz va oson qidiruv</p>
+        <a href="#listings" class="inline-block mt-5 rounded-2xl bg-white text-slate-900 px-5 py-2 font-medium">E'lonlarni ko'rish</a>
+      </div>
+    </section>
+    <!-- Intro -->
+    <section class="py-8 md:py-12 grid md:grid-cols-5 gap-6 items-center">
+      <div class="md:col-span-3">
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+          Toshkentga kelayotgan talabalar uchun <span class="underline decoration-wavy decoration-indigo-400">yotoqxona va turar joy</span> topish
+        </h1>
+        <p class="mt-3 text-slate-600">Bir joyda qidiruv, filtr, tekshiruv belgilari va tezkor aloqa. Sentyabr oyida joy tanqisligiga tushib qolmang!</p>
+        <div class="mt-4 hidden md:block">
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="q" placeholder="Manzil, universitet, tur..." class="pl-9 rounded-2xl w-full border px-3 py-2"/>
+          </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button id="openPost2" class="rounded-2xl bg-indigo-600 text-white px-4 py-2">E'lon berish</button>
+          <a href="#listings" class="rounded-2xl border px-4 py-2">E'lonlarni ko'rish</a>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <div class="rounded-2xl border p-4 shadow-sm bg-white">
+          <h3 class="font-bold mb-2">Tezkor maslahatlar</h3>
+          <ul class="text-sm text-slate-700 list-disc pl-5 space-y-2">
+            <li>Oldindan to'lovni noma'lum kartalarga yubormang.</li>
+            <li>Uy ko'rilgach va shartnoma tuzilgach to'lov qiling.</li>
+            <li>Manzilni xarita orqali tekshiring, kechasi yolg'iz bormang.</li>
+            <li>Hujjat nusxalarini so'rang (pasport, mulk hujjati).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section id="filters" class="hidden md:block">
+      <div class="rounded-2xl border bg-white p-4">
+        <div class="grid md:grid-cols-6 gap-4 items-end">
+          <div class="md:col-span-2">
+            <label class="block text-sm mb-1">Qidiruv</label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input id="q2" class="pl-9 rounded-2xl w-full border px-3 py-2" placeholder="Manzil, universitet, tur..."/>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm mb-1">Narx (maks.)</label>
+            <input id="maxPrice" type="range" min="300000" max="3000000" step="50000" class="w-full" />
+            <div class="text-xs text-slate-600 mt-1"><span id="maxPriceLabel"></span></div>
+          </div>
+
+          <div>
+            <label class="block text-sm mb-1">Jins</label>
+            <select id="gender" class="rounded-2xl border w-full px-3 py-2">
+              <option>Barchasi</option>
+              <option>Aralash</option>
+              <option>Qizlar</option>
+              <option>O'g'il bolalar</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm mb-1">Tur</label>
+            <select id="type" class="rounded-2xl border w-full px-3 py-2">
+              <option>Barchasi</option>
+              <option>Yotoqxona</option>
+              <option>Kvartira</option>
+              <option>Xonadon</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm mb-1">Universitet</label>
+            <select id="uni" class="rounded-2xl border w-full px-3 py-2">
+              <option>Barchasi</option>
+              <option>TATU</option>
+              <option>TDTU</option>
+              <option>WIUT</option>
+              <option>TIQXMMI NRU</option>
+              <option>Tibbiyot</option>
+              <option>SamDU filiali</option>
+              <option>Boshqa</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-6 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <label class="mb-0 text-sm">Saralash:</label>
+              <select id="sortBy" class="rounded-2xl border px-3 py-2">
+                <option value="newest">Eng yangi</option>
+                <option value="nearest">Eng yaqin</option>
+                <option value="price_asc">Arzondan qimmatga</option>
+                <option value="price_desc">Qimmatdan arzon</option>
+              </select>
+            </div>
+            <button id="reset" class="rounded-2xl px-3 py-2 text-slate-700 hover:bg-slate-100">Tozalash</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listings -->
+    <section id="listings" class="py-8">
+      <div class="flex items-end justify-between mb-4">
+        <div>
+        <h2 class="text-2xl font-bold">Topilgan e'lonlar</h2>
+          <p class="text-slate-500 text-sm"><span id="count"></span> ta mos e'lon topildi</p>
+        </div>
+        <div class="hidden md:block w-80">
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="q3" placeholder="Manzil, universitet, tur..." class="pl-9 rounded-2xl w-full border px-3 py-2"/>
+          </div>
+        </div>
+      </div>
+
+      <div id="cards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <div id="empty" class="hidden text-center py-10 border rounded-2xl">
+        <p class="text-slate-600 mb-3">Mos e'lon topilmadi.</p>
+        <button id="reset2" class="rounded-2xl border px-4 py-2">Filtrlarni tozalash</button>
+      </div>
+    </section>
+
+    <!-- Map -->
+    <section id="mapSec" class="py-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xl font-bold">Xaritada ko'rinish</h3>
+        <span class="text-sm text-slate-500">Markerlar – filtrlangan e'lonlar</span>
+      </div>
+      <div id="map" class="rounded-2xl overflow-hidden border"></div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="py-10">
+      <h3 class="text-xl font-bold mb-4">Qanday ishlaydi?</h3>
+      <div class="grid md:grid-cols-2 gap-6 text-slate-700">
+        <ol class="list-decimal pl-5 space-y-2">
+          <li>Filtrlarni sozlang (narx, universitet, tur, jins).</li>
+          <li>Profilni ko'rib chiqing va <b>tasdiqlangan</b> belgisini tekshiring.</li>
+          <li>Aloqa tugmalari orqali telefon yoki email bilan bog'laning.</li>
+          <li>Ko'chib kirishdan oldin <b>shartnoma</b> va <b>to'lov tartibi</b>ni kelishib oling.</li>
+        </ol>
+        <ol class="list-decimal pl-5 space-y-2">
+          <li>"E'lon berish" tugmasi orqali joyingiz haqida ma'lumot kiriting.</li>
+          <li>Rasmlar, narx va qulayliklarni aniq yozing.</li>
+          <li>Talabalar bilan tezkor aloqa qiling va uchrashuv belgilang.</li>
+          <li>Shartnoma va to'lovni rasmiylashtiring.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Safety -->
+    <section id="safety" class="py-10">
+      <h3 class="text-xl font-bold mb-4 flex items-center gap-2">Xavfsizlik bo'yicha qisqa maslahatlar</h3>
+      <ul class="grid md:grid-cols-2 gap-3 text-slate-700">
+        <li class="flex gap-2">✅ To'lovni faqat uy ko'rilgach va shartnoma tuzilgach amalga oshiring.</li>
+        <li class="flex gap-2">✅ Shaxsni tasdiqlovchi hujjatlarning nusxasini so'rang.</li>
+        <li class="flex gap-2">✅ Xarita bo'yicha manzilni tekshiring, kechasi yolg'iz bormang.</li>
+        <li class="flex gap-2">✅ Oldindan to'lovni noma'lum kartalarga yubormang.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="mt-12 border-t">
+    <div class="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-3">
+      <p class="text-sm text-slate-500">© 2025 YotoqTop. Talabalar uchun bepul platforma.</p>
+      <div class="flex items-center gap-3 text-sm text-slate-600">
+        <span>📅 Sentyabrga tayyorlaning</span>
+        <span>🎓 Toshkent</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Post dialog -->
+  <dialog id="postDialog" class="rounded-2xl p-0 w-[min(560px,95vw)]">
+    <form method="dialog">
+      <div class="p-4 border-b font-bold">E'lon berish</div>
+      <div class="p-4 space-y-3">
+        <div class="grid md:grid-cols-2 gap-3">
+          <label class="text-sm">Sarlavha
+            <input id="f_title" required class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="Universitetga yaqin yotoqxona"/>
+          </label>
+          <label class="text-sm">Manzil
+            <input id="f_address" required class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="Tuman, ko'cha, uy"/>
+          </label>
+          <label class="text-sm">Narx (so'm/oy)
+            <input id="f_price" type="number" min="0" required class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="700000"/>
+          </label>
+          <label class="text-sm">Tur
+            <select id="f_type" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>Yotoqxona</option>
+              <option>Kvartira</option>
+              <option>Xonadon</option>
+            </select>
+          </label>
+          <label class="text-sm">Jins
+            <select id="f_gender" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>Aralash</option>
+              <option>Qizlar</option>
+              <option>O'g'il bolalar</option>
+            </select>
+          </label>
+          <label class="text-sm">Sig'im (o'rin)
+            <input id="f_capacity" type="number" min="1" value="2" class="mt-1 border w-full rounded-2xl px-3 py-2"/>
+          </label>
+          <label class="text-sm">Yaqin universitet
+            <select id="f_uni" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>TATU</option>
+              <option>TDTU</option>
+              <option>WIUT</option>
+              <option>TIQXMMI NRU</option>
+              <option>Tibbiyot</option>
+              <option>SamDU filiali</option>
+              <option>Boshqa</option>
+            </select>
+          </label>
+          <label class="text-sm">Masofa (km)
+            <input id="f_distance" type="number" step="0.1" min="0" value="1" class="mt-1 border w-full rounded-2xl px-3 py-2"/>
+          </label>
+          <label class="text-sm">Telefon
+            <input id="f_phone" class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="+998 90 123 45 67"/>
+          </label>
+          <label class="text-sm">Email
+            <input id="f_email" type="email" class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="name@example.com"/>
+          </label>
+          <label class="text-sm md:col-span-2">Rasm URL
+            <input id="f_photo" class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="https://...jpg"/>
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm"><input id="f_verified" type="checkbox" class="scale-110"> Tasdiqlangan</label>
+        </div>
+      </div>
+      <div class="p-4 border-t flex justify-end gap-2">
+        <button class="rounded-2xl px-4 py-2" value="cancel">Bekor qilish</button>
+        <button id="submitPost" class="rounded-2xl bg-indigo-600 text-white px-4 py-2" value="default">Saqlash</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Mobile filters sheet (simple modal) -->
+  <dialog id="filtersDialog" class="rounded-2xl p-0 w-[min(520px,95vw)]">
+    <form method="dialog">
+      <div class="p-4 border-b font-bold">Filtrlar</div>
+      <div class="p-4 space-y-3">
+        <label class="block text-sm">Qidiruv
+          <input id="mq" class="mt-1 border w-full rounded-2xl px-3 py-2" placeholder="Manzil, universitet, tur..."/>
+        </label>
+        <label class="block text-sm">Narx (maks.)
+          <input id="m_maxPrice" type="range" min="300000" max="3000000" step="50000" class="w-full"/>
+          <div class="text-xs text-slate-600 mt-1"><span id="m_maxPriceLabel"></span></div>
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="text-sm">Jins
+            <select id="m_gender" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>Barchasi</option>
+              <option>Aralash</option>
+              <option>Qizlar</option>
+              <option>O'g'il bolalar</option>
+            </select>
+          </label>
+          <label class="text-sm">Tur
+            <select id="m_type" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>Barchasi</option>
+              <option>Yotoqxona</option>
+              <option>Kvartira</option>
+              <option>Xonadon</option>
+            </select>
+          </label>
+          <label class="text-sm col-span-2">Universitet
+            <select id="m_uni" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option>Barchasi</option>
+              <option>TATU</option>
+              <option>TDTU</option>
+              <option>WIUT</option>
+              <option>TIQXMMI NRU</option>
+              <option>Tibbiyot</option>
+              <option>SamDU filiali</option>
+              <option>Boshqa</option>
+            </select>
+          </label>
+          <label class="text-sm col-span-2">Saralash
+            <select id="m_sortBy" class="mt-1 border w-full rounded-2xl px-3 py-2">
+              <option value="newest">Eng yangi</option>
+              <option value="nearest">Eng yaqin</option>
+              <option value="price_asc">Arzondan qimmatga</option>
+              <option value="price_desc">Qimmatdan arzon</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="p-4 border-t flex justify-end gap-2">
+        <button class="rounded-2xl px-4 py-2" value="cancel">Yopish</button>
+        <button id="applyMobile" class="rounded-2xl bg-indigo-600 text-white px-4 py-2" value="default">Qo'llash</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    // --- MOCK DATA ---
+    const MOCK_LISTINGS = [
+      {
+        id: 1,
+        title: "Universitetga yaqin yotoqxona (Yakkasaroy)",
+        address: "Yakkasaroy, Bobur ko'chasi 12",
+        price: 700000,
+        type: "Yotoqxona",
+        capacity: 6,
+        gender: "Qizlar",
+        nearUniversity: "TATU",
+        distanceKm: 0.8,
+        amenities: ["Wi‑Fi","Kir yuvish","Konditsioner","24/7 xavfsizlik"],
+        contacts: { phone: "+998 90 123 45 67", email: "yakkasaroy@yotoq.uz" },
+        verified: true,
+        photos: ["https://images.unsplash.com/photo-1505692794403-34d4982f88aa?q=80&w=1200&auto=format&fit=crop"],
+        postedAt: "2025-08-20",
+        lat: 41.285,
+        lng: 69.270,
+      },
+      {
+        id: 2,
+        title: "Talabalar uchun kvartira (Chilonzor 3)",
+        address: "Chilonzor, 3-mavze, 45-uy",
+        price: 1200000,
+        type: "Kvartira",
+        capacity: 3,
+        gender: "Aralash",
+        nearUniversity: "TDTU",
+        distanceKm: 2.1,
+        amenities: ["Wi‑Fi","Gaz/Elektr","Mebel","Issiq suv"],
+        contacts: { phone: "+998 93 555 66 77", email: "chilonzor@rent.uz" },
+        verified: false,
+        photos: ["https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop"],
+        postedAt: "2025-08-22",
+        lat: 41.275,
+        lng: 69.205,
+      },
+      {
+        id: 3,
+        title: "Xonadon: 2 talaba uchun (Mirzo Ulug'bek)",
+        address: "MU tumani, Temur Malik ko'chasi 7",
+        price: 900000,
+        type: "Xonadon",
+        capacity: 2,
+        gender: "O'g'il bolalar",
+        nearUniversity: "WIUT",
+        distanceKm: 1.4,
+        amenities: ["Wi‑Fi","Mebel","Jihozlangan oshxona"],
+        contacts: { phone: "+998 95 001 00 01", email: "mu-host@home.uz" },
+        verified: true,
+        photos: ["https://images.unsplash.com/photo-1502005229762-cf1b2da7c52f?q=80&w=1200&auto=format&fit=crop"],
+        postedAt: "2025-08-24",
+        lat: 41.338,
+        lng: 69.334,
+      },
+      {
+        id: 4,
+        title: "Talaba yotoqxona: Aeroport yaqinida",
+        address: "Sergeli, Yangihayot 2",
+        price: 550000,
+        type: "Yotoqxona",
+        capacity: 8,
+        gender: "O'g'il bolalar",
+        nearUniversity: "TIQXMMI NRU",
+        distanceKm: 3.6,
+        amenities: ["Wi‑Fi","Videokuzatuv","Keng oshxona"],
+        contacts: { phone: "+998 99 321 00 22", email: "sergeli@yotoq.uz" },
+        verified: false,
+        photos: ["https://images.unsplash.com/photo-1504610926078-a1611febcad3?q=80&w=1200&auto=format&fit=crop"],
+        postedAt: "2025-08-18",
+        lat: 41.248,
+        lng: 69.205,
+      },
+    ];
+
+    // --- STATE ---
+    let state = {
+      q: "",
+      maxPrice: 1500000,
+      gender: "Barchasi",
+      type: "Barchasi",
+      uni: "Barchasi",
+      sortBy: "newest",
+      listings: [...MOCK_LISTINGS],
+    };
+
+    const fmt = new Intl.NumberFormat('uz-UZ');
+    const el = (sel) => document.querySelector(sel);
+
+    // Bind inputs (desktop)
+    const q = el('#q'), q2 = el('#q2'), q3 = el('#q3');
+    const maxPrice = el('#maxPrice');
+    const maxPriceLabel = el('#maxPriceLabel');
+    const gender = el('#gender');
+    const type = el('#type');
+    const uni = el('#uni');
+    const sortBy = el('#sortBy');
+    const resetBtn = el('#reset');
+    const resetBtn2 = el('#reset2');
+
+    // Mobile
+    const filtersDialog = el('#filtersDialog');
+    const openFiltersMobile = el('#openFiltersMobile');
+    const mq = el('#mq');
+    const m_maxPrice = el('#m_maxPrice');
+    const m_maxPriceLabel = el('#m_maxPriceLabel');
+    const m_gender = el('#m_gender');
+    const m_type = el('#m_type');
+    const m_uni = el('#m_uni');
+    const m_sortBy = el('#m_sortBy');
+    const applyMobile = el('#applyMobile');
+
+    // Post dialog
+    const postDialog = el('#postDialog');
+    const openPost = el('#openPost');
+    const openPost2 = el('#openPost2');
+    const submitPost = el('#submitPost');
+
+    function syncInputsFromState(){
+      [q,q2,q3,mq].forEach(i=>{ if(i) i.value = state.q; });
+      if(maxPrice){ maxPrice.value = state.maxPrice; maxPriceLabel.textContent = fmt.format(state.maxPrice)+" so'm"; }
+      if(m_maxPrice){ m_maxPrice.value = state.maxPrice; m_maxPriceLabel.textContent = fmt.format(state.maxPrice)+" so'm"; }
+      if(gender) gender.value = state.gender; if(type) type.value = state.type; if(uni) uni.value = state.uni; if(sortBy) sortBy.value = state.sortBy;
+      if(m_gender) m_gender.value = state.gender; if(m_type) m_type.value = state.type; if(m_uni) m_uni.value = state.uni; if(m_sortBy) m_sortBy.value = state.sortBy;
+    }
+
+    function applyFilters(){
+      let data = [...state.listings];
+      const q = state.q.trim().toLowerCase();
+      if(q){
+        data = data.filter(x => (x.title+" "+x.address+" "+x.nearUniversity+" "+x.type+" "+x.gender).toLowerCase().includes(q));
+      }
+      data = data.filter(x => x.price <= state.maxPrice);
+      if(state.gender !== 'Barchasi') data = data.filter(x => x.gender === state.gender);
+      if(state.type !== 'Barchasi') data = data.filter(x => x.type === state.type);
+      if(state.uni !== 'Barchasi') data = data.filter(x => x.nearUniversity === state.uni);
+
+      if(state.sortBy === 'price_asc') data.sort((a,b)=>a.price-b.price);
+      if(state.sortBy === 'price_desc') data.sort((a,b)=>b.price-a.price);
+      if(state.sortBy === 'nearest') data.sort((a,b)=>a.distanceKm-b.distanceKm);
+      if(state.sortBy === 'newest') data.sort((a,b)=> new Date(b.postedAt) - new Date(a.postedAt));
+
+      renderCards(data);
+      renderMap(data);
+    }
+
+    function renderCards(list){
+      const cards = el('#cards');
+      const empty = el('#empty');
+      const count = el('#count');
+      cards.innerHTML = '';
+      count.textContent = list.length;
+      if(list.length === 0){ empty.classList.remove('hidden'); return; } else { empty.classList.add('hidden'); }
+
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl overflow-hidden border bg-white shadow-sm flex flex-col';
+        card.innerHTML = `
+          <div class="aspect-[16/10] w-full bg-slate-100">
+            <img src="${(item.photos&&item.photos[0])||''}" alt="${item.title}" class="w-full h-full object-cover"/>
+          </div>
+          <div class="p-4">
+            <div class="flex items-start justify-between gap-2">
+              <h4 class="text-lg font-bold line-clamp-2">${item.title}</h4>
+              ${item.verified ? '<span class="text-xs px-2 py-1 rounded-full bg-green-600 text-white">Tasdiqlangan</span>' : ''}
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div class="text-xl font-bold">${fmt.format(item.price)} so'm/oy</div>
+              <span class="text-xs px-2 py-1 rounded-full bg-slate-100">${item.type}</span>
+            </div>
+            <div class="text-sm text-slate-600 mt-1">📍 ${item.address}</div>
+            <div class="flex flex-wrap gap-2 mt-2 text-xs">
+              <span class="px-2 py-1 rounded-full border">${item.gender}</span>
+              <span class="px-2 py-1 rounded-full border">${item.capacity} o'rin</span>
+              <span class="px-2 py-1 rounded-full border">${item.nearUniversity} • ${item.distanceKm} km</span>
+            </div>
+            <div class="flex gap-2 mt-3">
+              ${item.contacts?.phone ? `<a href="tel:${item.contacts.phone.replace(/\s/g,'')}" class="rounded-2xl border px-3 py-2">📞 Qo'ng'iroq</a>`:''}
+              ${item.contacts?.email ? `<a href="mailto:${item.contacts.email}" class="rounded-2xl border px-3 py-2">✉️ Email</a>`:''}
+            </div>
+          </div>`;
+        cards.appendChild(card);
+      });
+    }
+
+    function resetAll(){
+      state.q = '';
+      state.maxPrice = 1500000;
+      state.gender = 'Barchasi';
+      state.type = 'Barchasi';
+      state.uni = 'Barchasi';
+      state.sortBy = 'newest';
+      syncInputsFromState();
+      applyFilters();
+    }
+
+    // Listeners (desktop + shared)
+    [q,q2,q3].forEach(inp=> inp && inp.addEventListener('input', e=>{ state.q = e.target.value; applyFilters(); }));
+    if(maxPrice) maxPrice.addEventListener('input', e=>{ state.maxPrice = +e.target.value; maxPriceLabel.textContent = fmt.format(state.maxPrice)+" so'm"; applyFilters(); });
+    if(gender) gender.addEventListener('change', e=>{ state.gender = e.target.value; applyFilters(); });
+    if(type) type.addEventListener('change', e=>{ state.type = e.target.value; applyFilters(); });
+    if(uni) uni.addEventListener('change', e=>{ state.uni = e.target.value; applyFilters(); });
+    if(sortBy) sortBy.addEventListener('change', e=>{ state.sortBy = e.target.value; applyFilters(); });
+    if(resetBtn) resetBtn.addEventListener('click', resetAll);
+    if(resetBtn2) resetBtn2.addEventListener('click', resetAll);
+
+    // Mobile filters open/apply
+    if(openFiltersMobile) openFiltersMobile.addEventListener('click', ()=>{ filtersDialog.showModal(); mq.value = state.q; m_maxPrice.value = state.maxPrice; m_maxPriceLabel.textContent = fmt.format(state.maxPrice)+" so'm"; m_gender.value = state.gender; m_type.value = state.type; m_uni.value = state.uni; m_sortBy.value = state.sortBy; });
+    if(m_maxPrice) m_maxPrice.addEventListener('input', e=>{ m_maxPriceLabel.textContent = fmt.format(+e.target.value)+" so'm"; });
+    if(applyMobile) applyMobile.addEventListener('click', ()=>{ state.q = mq.value; state.maxPrice = +m_maxPrice.value; state.gender = m_gender.value; state.type = m_type.value; state.uni = m_uni.value; state.sortBy = m_sortBy.value; filtersDialog.close(); syncInputsFromState(); applyFilters(); });
+
+    // Post dialog open/submit
+    function openPostModal(){ postDialog.showModal(); }
+    if(openPost) openPost.addEventListener('click', openPostModal);
+    if(openPost2) openPost2.addEventListener('click', openPostModal);
+
+    if(submitPost) submitPost.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const item = {
+        id: Date.now(),
+        title: el('#f_title').value.trim(),
+        address: el('#f_address').value.trim(),
+        price: +el('#f_price').value || 0,
+        type: el('#f_type').value,
+        capacity: +el('#f_capacity').value || 1,
+        gender: el('#f_gender').value,
+        nearUniversity: el('#f_uni').value,
+        distanceKm: +el('#f_distance').value || 0,
+        amenities: [],
+        contacts: { phone: el('#f_phone').value.trim(), email: el('#f_email').value.trim() },
+        verified: el('#f_verified').checked,
+        photos: [el('#f_photo').value.trim() || 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop'],
+        postedAt: new Date().toISOString().slice(0,10),
+      };
+      if(!item.title || !item.address || !item.price){ alert("Sarlavha, manzil va narxni kiriting"); return; }
+      state.listings = [item, ...state.listings];
+      postDialog.close();
+      applyFilters();
+    });
+
+    // Init
+    syncInputsFromState();
+
+    // Lottie animation (hero)
+    try{
+      lottie.loadAnimation({
+        container: document.getElementById('lottie-hero'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        // Simple education/house animation JSON (publicly hosted)
+        path: 'https://assets2.lottiefiles.com/packages/lf20_q5pk6p1k.json'
+      });
+    }catch(e){}
+
+    // Map setup
+    let map, markersLayer;
+    function initMap(){
+      if(map) return;
+      map = L.map('map', { scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+      markersLayer = L.layerGroup().addTo(map);
+      map.setView([41.2995, 69.2401], 11); // Tashkent center
+    }
+    function renderMap(list){
+      initMap();
+      markersLayer.clearLayers();
+      const bounds = [];
+      list.forEach(x=>{
+        if(typeof x.lat === 'number' && typeof x.lng === 'number'){
+          const m = L.marker([x.lat, x.lng]).addTo(markersLayer);
+          m.bindPopup(`<b>${x.title}</b><br/>${new Intl.NumberFormat('uz-UZ').format(x.price)} so'm/oy<br/>${x.nearUniversity} • ${x.distanceKm} km`);
+          bounds.push([x.lat, x.lng]);
+        }
+      });
+      if(bounds.length){ map.fitBounds(bounds, { padding: [30,30] }); }
+    }
+
+    applyFilters();
+  </script>
+</body>
+</html>
